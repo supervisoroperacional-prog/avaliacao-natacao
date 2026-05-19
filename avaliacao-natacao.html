@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avaliação Trimestral – Natação</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --blue: #1a4a8a;
+    --aqua: #00b4d8;
+    --aqua-light: #90e0ef;
+    --white: #f8faff;
+    --gray: #8a9bb5;
+    --card: #ffffff;
+    --border: #dce6f5;
+    --success: #10b981;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--navy);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #0a1628 0%, #1a4a8a 60%, #00b4d8 100%);
+    padding: 48px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 60px;
+    background: var(--white);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .header-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+  .header-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: var(--aqua-light);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(144,224,239,0.3);
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .header h1 em { color: var(--aqua-light); font-style: italic; }
+  .header p { color: rgba(255,255,255,0.65); font-size: 14px; font-weight: 300; }
+
+  main {
+    background: var(--white);
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--aqua);
+    margin-bottom: 12px;
+  }
+
+  .turmas-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .turma-btn {
+    border: 2px solid var(--border);
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .turma-btn:hover { border-color: var(--aqua); background: #f0fbff; }
+  .turma-btn.active {
+    border-color: var(--blue);
+    background: linear-gradient(135deg, #f0f7ff, #e8f4ff);
+    box-shadow: 0 4px 14px rgba(26,74,138,0.12);
+  }
+  .turma-btn .emoji { font-size: 22px; margin-bottom: 6px; display: block; }
+  .turma-btn .name { font-weight: 600; font-size: 15px; color: var(--navy); }
+  .turma-btn .age { font-size: 12px; color: var(--gray); margin-top: 2px; }
+
+  .form-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(10,22,40,0.05);
+  }
+
+  .field { margin-bottom: 20px; }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4a5a6e;
+    margin-bottom: 7px;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--navy);
+    background: #fafcff;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--aqua);
+    background: #fff;
+  }
+  .field textarea { resize: vertical; min-height: 80px; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .indicadores-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .indicadores-sub { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
+
+  .indicador-item {
+    background: #f8faff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .indicador-item .ind-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .indicador-item .ind-mes {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--aqua);
+    margin-bottom: 3px;
+  }
+  .indicador-item .ind-texto {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.4;
+  }
+
+  .stars { display: flex; gap: 6px; flex-shrink: 0; }
+  .star {
+    width: 34px; height: 34px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 15px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    font-weight: 600;
+    color: var(--gray);
+  }
+  .star:hover { border-color: var(--aqua); background: #e8f9ff; color: var(--aqua); }
+  .star.selected { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .star.s0.selected { background: #64748b; border-color: #64748b; }
+  .star.s5.selected { background: var(--success); border-color: var(--success); }
+
+  .aluno-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .aluno-row {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+  .aluno-row input[type="text"] {
+    flex: 1; border: none; background: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; color: var(--navy);
+    outline: none; padding: 0;
+  }
+  .aluno-row .remove-btn {
+    background: none; border: none; color: #ccc;
+    cursor: pointer; font-size: 18px; line-height: 1;
+    transition: color 0.15s;
+  }
+  .aluno-row .remove-btn:hover { color: #e55; }
+  .add-aluno-btn {
+    background: none;
+    border: 1.5px dashed var(--border);
+    border-radius: 10px;
+    width: 100%;
+    padding: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--gray);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .add-aluno-btn:hover { border-color: var(--aqua); color: var(--aqua); background: #f0fbff; }
+
+  .aluno-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(10,22,40,0.04);
+  }
+  .aluno-card-header {
+    background: linear-gradient(90deg, #1a4a8a, #0077b6);
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .aluno-card-header .avatar {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .aluno-card-header .aluno-nome { font-weight: 600; font-size: 15px; color: #fff; }
+  .aluno-card-body { padding: 20px 22px; }
+
+  .progress-bar-wrap {
+    background: #eef2f8;
+    border-radius: 8px;
+    height: 6px;
+    margin-top: 8px;
+  }
+  .progress-bar {
+    background: linear-gradient(90deg, var(--aqua), var(--blue));
+    height: 6px;
+    border-radius: 8px;
+    transition: width 0.3s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--blue), #0077b6);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(26,74,138,0.25);
+    width: 100%;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,74,138,0.35); }
+  .btn-secondary {
+    background: #fff;
+    color: var(--blue);
+    border: 1.5px solid var(--blue);
+    border-radius: 12px;
+    padding: 12px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .btn-secondary:hover { background: #f0f7ff; }
+
+  .result-header {
+    background: linear-gradient(135deg, var(--success), #059669);
+    border-radius: 16px;
+    padding: 24px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .result-header .check { font-size: 40px; margin-bottom: 8px; }
+  .result-header h2 { font-family: 'DM Serif Display', serif; font-size: 24px; }
+  .result-header p { opacity: 0.85; font-size: 13px; margin-top: 4px; }
+
+  .result-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .result-table th {
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 500;
+  }
+  .result-table th:first-child { border-radius: 8px 0 0 8px; }
+  .result-table th:last-child { border-radius: 0 8px 8px 0; }
+  .result-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .result-table tr:last-child td { border: none; }
+  .nota-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .n0 { background: #f1f5f9; color: #64748b; }
+  .n1 { background: #fee2e2; color: #b91c1c; }
+  .n2 { background: #fef3c7; color: #92400e; }
+  .n3 { background: #fef9c3; color: #713f12; }
+  .n4 { background: #d1fae5; color: #065f46; }
+  .n5 { background: #dcfce7; color: #14532d; }
+
+  .copy-btn {
+    background: #f0f7ff;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { background: var(--blue); color: #fff; }
+
+  .steps {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .step {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 500; color: var(--gray);
+  }
+  .step .dot {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--border);
+    color: var(--gray);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .step.active .dot { background: var(--blue); color: #fff; }
+  .step.done .dot { background: var(--success); color: #fff; }
+  .step.active { color: var(--navy); }
+  .step-line { flex: 1; height: 2px; background: var(--border); border-radius: 2px; }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 500px) {
+    .turmas-grid { grid-template-columns: 1fr 1fr; }
+    .row-2 { grid-template-columns: 1fr; }
+    .ind-header { flex-direction: column; }
+    .stars { flex-wrap: wrap; }
+    main { padding: 28px 16px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <span class="header-badge">Contorno do Corpo – Unidade I</span>
+    <h1>Avaliação<br><em>Trimestral</em> de Natação</h1>
+    <p>Período: Janeiro – Abril 2026 &nbsp;·&nbsp; Inclui reavaliação Ago–Out 2025 &nbsp;·&nbsp; Notas de 0 a 5</p>
+  </div>
+</div>
+
+<main>
+
+  <div class="steps" id="steps">
+    <div class="step active" id="step1-dot"><div class="dot">1</div> Turma</div>
+    <div class="step-line"></div>
+    <div class="step" id="step2-dot"><div class="dot">2</div> Alunos</div>
+    <div class="step-line"></div>
+    <div class="step" id="step3-dot"><div class="dot">3</div> Avaliação</div>
+    <div class="step-line"></div>
+    <div class="step" id="step4-dot"><div class="dot">4</div> Resultado</div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div id="step1">
+    <p class="section-label">Passo 1 — Selecionar turma</p>
+    <div class="turmas-grid">
+      <button class="turma-btn" onclick="selectTurma('baby')" id="btn-baby">
+        <span class="emoji">🍼</span>
+        <div class="name">Baby Shark</div>
+        <div class="age">6 meses a 2 anos</div>
+      </button>
+      <button class="turma-btn" onclick="selectTurma('nemo')" id="btn-nemo">
+        <span class="emoji">🐠</span>
+        <div class="name">Nemo</div>
+        <div class="age">3 a 4 anos</div>
+      </button>
+      <button class="turma-btn" onclick="selectTurma('dorys')" id="btn-dorys">
+        <span class="emoji">🐟</span>
+        <div class="name">Dorys</div>
+        <div class="age">5 a 8 anos</div>
+      </button>
+      <button class="turma-btn" onclick="selectTurma('impulse')" id="btn-impulse">
+        <span class="emoji">🏊</span>
+        <div class="name">Impulse</div>
+        <div class="age">9 a 12 anos</div>
+      </button>
+    </div>
+
+    <div class="form-card" id="meta-form" style="display:none;">
+      <div class="field">
+        <label>Seu nome</label>
+        <select id="professor">
+          <option value="">— Selecione o professor —</option>
+          <option>Allan</option>
+          <option>Willer</option>
+          <option>Stephanny</option>
+        </select>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label>Horário da turma</label>
+          <select id="horario-turma">
+            <option value="">— Selecione o horário —</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Data da avaliação</label>
+          <input type="date" id="data-aval">
+        </div>
+      </div>
+      <button class="btn-primary" onclick="goToStep2()">Próximo: cadastrar alunos →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="step2" class="hidden">
+    <p class="section-label">Passo 2 — Alunos da turma</p>
+    <div class="form-card">
+      <div class="indicadores-title" id="turma-titulo-s2">Turma</div>
+      <p class="indicadores-sub">Adicione o nome de cada aluno que será avaliado.</p>
+      <div class="aluno-list" id="aluno-list"></div>
+      <button class="add-aluno-btn" onclick="addAluno()">+ Adicionar aluno</button>
+      <br><br>
+      <button class="btn-primary" onclick="goToStep3()">Próximo: avaliar alunos →</button>
+      <button class="btn-secondary" onclick="goToStep1()">← Voltar</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="step3" class="hidden">
+    <p class="section-label">Passo 3 — Avaliação individual</p>
+    <div id="avaliacao-cards"></div>
+    <div class="form-card">
+      <button class="btn-primary" onclick="gerarResultado()">Gerar resultado consolidado →</button>
+      <button class="btn-secondary" onclick="goToStep2()">← Voltar</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div id="step4" class="hidden">
+    <div class="result-header">
+      <div class="check">✅</div>
+      <h2>Avaliação concluída!</h2>
+      <p id="result-meta"></p>
+    </div>
+    <p class="section-label">Resumo da turma</p>
+    <div class="form-card" style="overflow-x:auto;">
+      <table class="result-table" id="result-table"></table>
+    </div>
+    <div class="form-card">
+      <div class="field">
+        <label>Observações gerais da turma (opcional)</label>
+        <textarea id="obs-gerais" placeholder="Registro de pontos de atenção, destaques, encaminhamentos..."></textarea>
+      </div>
+      <button id="btn-enviar" class="btn-primary" style="margin-bottom:10px;" onclick="enviarParaSheets()">📤 Enviar para a planilha</button>
+      <button class="copy-btn" onclick="copiarResultado()">📋 Copiar resultado para enviar</button>
+      <br>
+      <button class="btn-primary" style="margin-top:12px;" onclick="novaAvaliacao()">Fazer nova avaliação</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+const turmas = {
+  baby: {
+    nome: 'Baby Shark',
+    emoji: '🍼',
+    faixa: '6 meses a 2 anos',
+    indicadores: [
+      { mes: 'Set/25', texto: 'Engajado na água' },
+      { mes: 'Out/25', texto: 'Soprar bolhas' },
+      { mes: 'Nov/25', texto: 'Respiração assistida' },
+      { mes: 'Jan/26', texto: 'Interação ativa com o professor na água' },
+      { mes: 'Fev/26', texto: 'Flutuação passiva com conforto' },
+      { mes: 'Mar/26', texto: 'Resposta positiva à submersão breve' },
+    ]
+  },
+  nemo: {
+    nome: 'Nemo',
+    emoji: '🐠',
+    faixa: '3 a 4 anos',
+    indicadores: [
+      { mes: 'Ago/25', texto: 'Flutuação e pernada do Crawl' },
+      { mes: 'Set/25', texto: 'Flutuação dorsal' },
+      { mes: 'Out/25', texto: 'Propulsão e respiração' },
+      { mes: 'Jan/26', texto: 'Respiração lateral com apoio' },
+      { mes: 'Fev/26', texto: 'Deslocamento curto com autonomia' },
+      { mes: 'Mar/26', texto: 'Organização corporal em sequência simples (entrar → deslocar → parar)' },
+    ]
+  },
+  dorys: {
+    nome: 'Dorys',
+    emoji: '🐟',
+    faixa: '5 a 8 anos',
+    indicadores: [
+      { mes: 'Ago/25', texto: 'Respira lateralmente com apoio' },
+      { mes: 'Set/25', texto: 'Faz ciclo de braçada com orientação' },
+      { mes: 'Out/25', texto: 'Nada crawl com fluidez até 18 metros' },
+      { mes: 'Jan/26', texto: 'Respira lateralmente sem apoio constante' },
+      { mes: 'Fev/26', texto: 'Coordenação contínua braços + pernas' },
+      { mes: 'Mar/26', texto: 'Alinhamento corporal durante o deslocamento' },
+    ]
+  },
+  impulse: {
+    nome: 'Impulse',
+    emoji: '🏊',
+    faixa: '9 a 12 anos',
+    indicadores: [
+      { mes: 'Ago/25', texto: 'Nada crawl com coordenação eficiente até 18 metros' },
+      { mes: 'Set/25', texto: 'Alinhamento e estabilidade no costas' },
+      { mes: 'Out/25', texto: 'Braçada e pernada do peito com sincronia' },
+      { mes: 'Jan/26', texto: 'Respiração bilateral funcional' },
+      { mes: 'Fev/26', texto: 'Transição eficiente entre braçadas' },
+      { mes: 'Mar/26', texto: 'Controle de ritmo e continuidade' },
+    ]
+  }
+};
+
+let selectedTurma = null;
+let selectedHorario = null;
+let alunos = [];
+let notas = {};
+
+const alunosPorTurma = {
+  'baby|seg 17h':   ['ISABELA VALERIANO SILVA','VINÍCIUS BATISTA SENA DE MIRANDA','JOSÉ FILIPE ROCHA CAMPOS','AMÉLIA GABRIELLE DE OLIVEIRA DELBEN','ANTÔNIO MAGALHÃES HELENO','HENRIQUE AVELAR DE OLIVEIRA','HENRY GABRIEL DA SILVA VASCO REIS','MURILO DE OLIVEIRA PINTO','AURORA COUTO MACIEL'],
+  'baby|ter 10h20': ['MANUELLA SEVERINO DA FONSECA REZENDE','ANNA VITÓRIA SILVA DE SOUZA','ANTÔNIO ALVES PAIVA CASTRO','HENRIQUE RODRIGUES DE BARROS','HUGO SANTIAGO PEREIRA SILVA','JULIA SANTANA DE AZEVEDO','THEODORO HENRIQUE DA CONCEIÇÃO NASCIMENTO','MARCELO JOSÉ SOUZA MIRANDA'],
+  'baby|qua 07h50': ['MATHEUS JOSÉ DIAS RIBAS FERREIRA','ANTÔNIO MAGALHÃES HELENO','HEITOR VIANA SOL CRUZ','HELENA COSTA VIEIRA MUNIZ','HENRIQUE MAFUZ NOBI'],
+  'baby|qua 17h':   ['JOSÉ BENÍCIO GONZAGA RIBEIRO','LIZ DE REZENDE BULHÕES','AMÉLIA GABRIELLE DE OLIVEIRA DELBEN','BENTO DE SOUZA BARBALHO','HENRIQUE MIRANDA SILVA','SAMUEL DA SILVA LISBOA','ANA LIZ FÉLIX DOS REIS','PIETRO NOGUEIRA GARCIA'],
+  'baby|qui 10h20': ['GUILHERME FELIPE LEMOS SILVA','ANNA VITÓRIA SILVA DE SOUZA','HENRIQUE RODRIGUES DE BARROS','HUGO SANTIAGO PEREIRA SILVA','JULIA SANTANA DE AZEVEDO','MATTEO SANTANA EIRAS','THEO DE MORAES GROBERIO'],
+  'baby|sab 10h20': ['MARCO AURÉLIO SILVA DE PAULO','CATARINA VITÓRIA VILELA NASCIMENTO','GABRIEL LIMA','ANNA CLARA DE PAULA LIMA','GAEL SOUZA RODRIGUES','GIOVANNA MARIA SOARES COSTA SILVA','HELENA FERREIRA SALES','JOÃO PEDRO DE JESUS ROCHA SOUZA','ANTÔNIO ALVES PAIVA CASTRO','AUGUSTO ALBUQUERQUE BRIGOLINI','MIGUEL BORGES NUNES','ALICE VIEIRA LIMA COSTA'],
+  'nemo|seg 10h20': ['MIGUEL JOSÉ DE MIRANDA','MARCOS DE PAULA TORQUATO','MATHEUS FELIPE DA CRUZ DÁVILA','CATARINA TAVARES DA COSTA'],
+  'nemo|ter 17h':   ['ANA BEATRIZ MATIAS PENA','MARIA TEREZA MATIAS PENA','BERNARDO PARAFITA GONÇALVES DE MATOS','GAEL BARROSO HELENO'],
+  'nemo|ter 18h50': ['LUISA MARIA ALMEIDA NEIVA DE FARIA','MIGUEL XAVIER GONZAGA','LIZ MARIAH RODRIGUES DOS SANTOS','AYLA MAGALHÃES SILVA FARIA','MARIANA MATOSINHOS MOL'],
+  'nemo|qua 10h20': ['MIGUEL JOSÉ DE MIRANDA','VICTOR MARQUES MUNIZ','JÚLIA RESENDE MAGALHÃES','LIANA GOIS TORRES'],
+  'nemo|qui 07h50': ['JÚLIA RESENDE MAGALHÃES','LUCAS MIRANDA','BENTO FLORES GONÇALVES','IGOR FERREIRA JARDIM'],
+  'nemo|qui 17h':   ['ÁRYA GARRIDES DE OLIVEIRA','ARTHUR RODRIGUES GONZAGA DE MELO','JOÃO LUCAS CORDEIRO DE OLIVEIRA','LUCAS GABRIEL COSTA RIBEIRO'],
+  'nemo|sex 10h20': ['PEDRO SIQUEIRA GRASSANO ALBUQUERQUE','LEONARDO DA SILVA RODRIGUES FILHO','DAVI GOULART SOARES','LIANA GOIS TORRES'],
+  'nemo|sex 17h':   ['JOÃO VITOR RIBEIRO','MATHEUS DOS SANTOS CARVALHO','LAVÍNIA MARIA GONZAGA BALBINO','CLARICE CANTELI NASCIMENTO','LIZ DE RESENDE BULHÕES'],
+  'nemo|sab 09h30': ['MARIA FERNANDA CAMPOS','ISABELA SOFIA SILVA DE CARVALHO','ALICE MAGALHÃES SILVA','AFONSO HENRIQUE TEIXEIRA DE OLIVEIRA','JOÃO PEDRO DA CRUZ DÁVILA','LETÍCIA KAROLINE FERREIRA SILVA','LAIR RAFAEL FÉLIX COSTA','EDUARDA SAMPAIO FERRAZ','ESTELA SAMPAIO FERRAZ','MARIA EDUARDA ALVES CARDOSO','LUCAS SANTANA ALVES COSTA'],
+  'dorys|seg 09h30': ['MATEUS DE PAULA TORQUATO','MARIA CLARA FERREIRA AVELAR','MARIA CECÍLIA FERREIRA AVELAR','VINÍCIUS MIGUEL GONÇALVES DO CARMO EUGÊNIO','ALÍCA LIZ ALVES MACIEL','BERNARDO LUIZ DOMINGOS MOREIRA','ALICE MARIA REZENDE MORAIS DE MARCILIA','LAURA ALVES DE MACEDO SILVA','SAMUEL GONÇALES PENA','ISIS COTTA OLIVEIRA','ELISA RAMALHO MARTINS'],
+  'dorys|seg 18h':   ['ISABELA MENDES CYRIANO','IASMINTAINÁ BATISTA MUNIZ','ENZO GABRIEL FERREIRA MENDES PAULA','GABRIEL HENRIQUE DE PAULA GOMES','ALICE MEIRELES MIRANDA','SOPHIA HENRIQUES ESTEVES','GUSTAVO HENRIQUE PEREIRA COSTA','HEITOR LINO CAMPOS'],
+  'dorys|seg 18h50': ['MARIA CLARA SILVA ANDRADE','DAVI BITTENCOURT COELHO MORAIS','MILENA FERNANDA MIRANDA COSTA','ANTHONY RAFAEL DOS SANTOS JOSINO','BERNARDO AMARAL MAXIMINIANO SOUZA QUEIROZ','ARTHUR HENRIQUE DIAS RESENDE','LARISSA BITENCOURT DE ALMEIDA','OTTO GOIS TORRES','GABRIEL MARTINS MENDES'],
+  'dorys|ter 09h30': ['MANUELA REZENDE VIGGIANO','SOFIA PEDRO RIBEIRO SOARES','CAIO GONÇALVES GODINHO','DAVI MILAGRES MENEZES','MARIA LUIZA NEVES ALMEIDA PEREIRA','ISABELLA NOGUEIRA CORDEIRO','ANA LUIZA FARIA OSTÁQUIO','HELENA COIMBRA ANDRADE','KEEVA EMILIA ALBUQUERQUE ANDRADE'],
+  'dorys|ter 18h':   ['ABRAÃO ALICE CORREIA','LÍVIA BITENCOURT MOREIRA','ÁLVARO MIGUEL SOUZA MARTINS','ELYSA MAGALHÃES SILVA FARIA','ARTHUR ANTONUCCI VASCONCELOS','CECÍLIA SOUZA OLIVEIRA','KAUANY VITÓRIA RIBEIRO DE SOUZA','SARAH GABRIELLY MILAGRES CORREA','HELENA PEIXOTO RIBEIRO','MARIANA BARBOSA BARROS ALVES DE PAULA','ÍSIS EMANUELLY FONSECA CAMPOS'],
+  'dorys|ter 19h40': ['ARTHUR DOS SANTOS MENDES','FELIPE DE SOUZA MEIRA','BERNARDO HENRIQUE DE MATOS COSTA','DAVI HENRIQUE DE JESUS DA SILVA','MATEUS COUTO DE ARAÚJO','BERNARDO REZENDE SILVA','ALICE VIEIRA GONÇALVES','LUIZA HELENA DOS SANTOS','IVAN BORBA VIEIRA'],
+  'dorys|qua 09h30': ['ANA LÍVIA RODRIGUES SANTOS','AFONSO HENRIQUE TEIXEIRA DE OLIVEIRA','LARISSA THAIS DE CARVALHO SILVA','ISIS COTTA OLIVEIRA','DAVI PENA MATOS','MELISSA NEVES COSTA MATOSINHOS','ISADORA LOPES BEGHINI','JOAQUIM JOSÉ TOLEDO GONÇALVES MILAGRE','BERNARDO LUCAS MATOSINHOS BRAGA','PEDRO LUCAS COSTA KRAUSS','LUANA AURORA GONÇALVES PIRES ALMEIDA'],
+  'dorys|qua 18h':   ['GABRIEL CAMPOS FONSECA','MELISSA VICTÓRIA LOBO DANTAS','HELENA PEIXOTO RIBEIRO','GUSTAVO HENRIQUE PEREIRA COSTA'],
+  'dorys|qua 18h50': ['JOÃO MIGUEL DUTRA COELHO','HIEITOR DE OLIVEIRA COELHO RODRIGUES','MARIANA LIBERALINO DE SOUZA','ANTHONY RAFAEL DOS SANTOS JOSINO','BERNARDO AMARAL MAXIMINIANO SOUZA QUEIROZ','LEONARDO BARBOSA SILVA FÉLIX','ARTHUR HENRIQUE DIAS RESENDE','OTTO GOIS TORRES','ALÍCIA MORAIS MAIA'],
+  'dorys|qui 09h30': ['MANUELA REZENDE VIGGIANO','SOFIA PEDRO RIBEIRO SOARES','MARIA FERNANDA DA SILVA COSTA','MARIA LUIZA NEVES ALMEIDA PEREIRA','DAVI MILAGRES MENEZES','ANA LUIZA FARIA OSTÁQUIO','HELENA COIMBRA ANDRADE','KEEVA EMÍLIA ALBUQUERQUE ANDRADE'],
+  'dorys|qui 18h':   ['HECTOR MIGUEL CEZAR DE ARRUDA','ENZO GABRIEL FERREIRA MENDES PAULA','ANTHONY ISMAEL DONATO SILVA','PEDRO CARVALHO LACERDA CAMPOS','JÚLIA CARVALHO LACERDA CAMPOS','SOPHIA HENRIQUES ESTEVES','ARTHUR ANTONUCCI VASCONCELOS','MARIANA BARBOSA BARROS ALVES DE PAULA','ÍSIS EMANUELLY FONSECA CAMPOS','HEITOR LINO CAMPOS','LARISSA BITENCOURT DE ALMEIDA'],
+  'dorys|qui 18h50': ['SOPHIA HELENA VIEIRA SILVA','DAVI HENRIQUE SANTOS TEODORO','AURORA DUCHAME','ISABELLA VALENTINA GOMES'],
+  'dorys|qui 19h40': ['DAVI AUGUSTO DE RESENDE MELO','MATEUS COUTO DE ARAÚJO','THÉO VIANNA PASSOS MIRANDA MATEUS','DAVI HENRIQUE DE JESUS DA SILVA','ELISA AMENDOLA MARTINS DA COSTA','ISADORA VALENTINA DA SILVA','MARIANA FERREIRA ALVES','MANUELA MENDES MONTEIRO','LUIZA HELENA DOS SANTOS'],
+  'dorys|sex 09h30': ['HELENA RESENDE AZIO','ZOE SARTI PEIXOTO','NICOLAS MARTINS FERREIRA ROCHA','LAURA ALVES DE MACEDO SILVA','ELOÁ MARTINS DOS SANTOS','DAVI PENA MATOS','JOAQUIM SANTOS CARVALHO','JOSÉ FELIPE SOUZA MIRANDA','AYLA CANCELA ANDRADE SOUZA LIMA','PIETRO JOSÉ ALVES CANDIDO','LUANA AURORA GONÇALVES PIRES ALMEIDA','ALÍCIA MORAIS MAIA'],
+  'dorys|sex 18h':   ['LUIZA MARTINS SÃO JOSÉ','DAVI DIAS MARTINS','PEDRO HENRIQUE GOULART DE SOUZA','HEITOR GOMES GONZAGA','GUADALUPE DE ASSIS VILELA GOMEZ','ALÍCIA REZENDE VIEIRA','JÚLIA ALVES NÓBREGA','CLARA ALVES NÓBREGA','AURORA DUCHARME','ISABELLA VALENTINA GOMES','LUANA DOS SANTOS SALES','LAIS VITAL DE PAULA'],
+  'dorys|sex 18h50': ['MIGUEL HENRIQUE DA SILVA CUNHA SENA','MAITÊ CECÍLIA TEIXEIRA SANTANA','BEATRIZ CAMPOS SILVA','MARIANA LIBERALINO DE SOUZA','CATARINA DE MIRANDA MORAES','GUSTAVO NOAH DE SOUZA PINA','ALICE FELGA BITTENCOURT MORAIS','GABRIEL MARTINS MENDES'],
+  'dorys|sab 08h40': ['NICOLAS MARTINS FERREIRA ROCHA','ISADORA VALENTINA DA SILVA','ALÍCIA SANTOS ALMEIDA','MARIA LUIZA COSTA NASCIMENTO','BERNARDO HENRIQUE BITENCOURT SILVA','BERNARDO SILVA DO CARMO','ALICE VIEIRA GONÇALVES','ALICE ADONAIS COUTO DE PAULA','HELENA LUIZA SOUZA FORTALEZA','SAMUEL ANDERSON DAS DORES CARNEIRO','HENRIQUE SOUZA FREITAS REZENDE'],
+  'impulse|seg 08h40': ['JOÃO FRANCISCO BEZERRA CAMPOS','GUILHERME LUÍS DA SILVA TUPY','ANA ESTER ALVES DIAS','VALENTINA ZACARONI','BERNARDO NOGUEIRA','AUGUSTO SOARES DINIS','HELENA SOARES DINIS'],
+  'impulse|ter 08h40': ['ANTÔNIO AUGUSTO DE SOUZA COSTA','ALÍCIA BARBOSA SILVA FÉLIX'],
+  'impulse|ter 15h30': ['MANUELA ALVES BONOTO PEREIRA','IASMIN TAINÁ BATISTA MUNIZ','LAIR RAFAEL FÉLIX COSTA','GUSTAVO RESENDE OLIVEIRA PINHO','BIANCA BITENCOURT DE ALMEIDA','HEITOR COSTA VIEIRA MUNIZ','LORENZO COSTA VIEIRA MUNIZ','ALÍCIA REZENDE VIEIRA','HEITOR DA CUNHA SANTOS'],
+  'impulse|ter 18h50': ['SOPHIA HELENA VIEIRA SILVA','DAVI HENRIQUE SANTOS TEODORO','CLARA TOLENTINO SOARES RIBEIRO DE OLIVEIRA','GABRIELA APARECIDA QUEIROZ DA COSTA','MARIA LAVÍNIA GENEROSO DE MORAIS','ISAAC SOUZA DA SILVA MEIRELES','MARIA ALICE BAESSA DE SOUZA','DANIEL DOUGLAS DA SILVA RODRIGUES SOUZA','ARTHUR BARROS MARQUES','LAVÍNIA ISABELLI FONSECA CAMPOS','PEDRO BITTENCOURT COELHO MORAIS','MARIA EDUARDA ALVES CARDOZO'],
+  'impulse|qua 08h40': ['ARTHUR VALENTIM DE SOUZA SILVA','ANA ESTER ALVES DIAS','CAMILY ANASTÁCIA DA SILVA','GUILHERME CARNEIRO MEIRELES','VALENTINA ZACARONI','ISADORA ANTONUCCI VASCONCELOS','BERNARDO NOGUEIRA','MARIA FERNANDA NOGUEIRA HOFMANN'],
+  'impulse|qui 08h40': ['JOÃO FRANCISCO BEZERRA CAMPOS','GUILHERME LUÍS DA SILVA TUPY','LUIS MIGUEL GURGEL DA CRUZ','LAVÍNIA ISABELLI FONSECA CAMPOS','EMANUELLE JULIA DOS SANTOS PENA'],
+  'impulse|qui 18h':   ['LUÍSA GODINHO ALEIXO','ARTHUR BARROS MARQUES','GUSTAVO RESENDE OLIVEIRA PINHO','LAÍSA MARIA DA CRUZ MENDONÇA','BIANCA BITENCOURT DE ALMEIDA','MARIA FERNANDA CAMPOS','JOÃO PEDRO DA CRUZ DÁVILA'],
+  'impulse|sex 08h40': ['CAMILY ANASTÁCIA DA SILVA','ISADORA ANTONUCCI VASCONCELOS','AUGUSTO SOARES DINIS','HELENA SOARES DINIS'],
+  'impulse|sab 09h30': ['MARIA FERNANDA CAMPOS','ISABELA SOFIA SILVA DE CARVALHO','ALICE MAGALHÃES SILVA','AFONSO HENRIQUE TEIXEIRA DE OLIVEIRA','JOÃO PEDRO DA CRUZ DÁVILA','LETÍCIA KAROLINE FERREIRA SILVA','LAIR RAFAEL FÉLIX COSTA','EDUARDA SAMPAIO FERRAZ','ESTELA SAMPAIO FERRAZ','MARIA EDUARDA ALVES CARDOSO','LUCAS SANTANA ALVES COSTA'],
+};
+
+const horariosPorTurma = {
+  baby:    ['seg 17h','ter 10h20','qua 07h50','qua 17h','qui 10h20','sab 10h20'],
+  nemo:    ['seg 10h20','ter 17h','ter 18h50','qua 10h20','qui 07h50','qui 17h','sex 10h20','sex 17h'],
+  dorys:   ['seg 09h30','seg 18h','seg 18h50','ter 09h30','ter 18h','ter 19h40','qua 09h30','qua 18h','qua 18h50','qui 09h30','qui 18h','qui 18h50','qui 19h40','sex 09h30','sex 18h','sex 18h50','sab 08h40'],
+  impulse: ['seg 08h40','ter 08h40','ter 15h30','ter 18h50','qua 08h40','qui 08h40','qui 18h','sex 08h40','sab 09h30'],
+};
+
+function selectTurma(key) {
+  selectedTurma = key;
+  document.querySelectorAll('.turma-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + key).classList.add('active');
+  const sel = document.getElementById('horario-turma');
+  sel.innerHTML = '<option value="">— Selecione o horário —</option>';
+  (horariosPorTurma[key] || []).forEach(h => {
+    const opt = document.createElement('option');
+    opt.value = h; opt.textContent = h.toUpperCase();
+    sel.appendChild(opt);
+  });
+  document.getElementById('meta-form').style.display = 'block';
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('data-aval').value = today;
+}
+
+function goToStep1() {
+  show('step1'); hide('step2'); hide('step3'); hide('step4');
+  setStep(1);
+}
+
+function goToStep2() {
+  if (!selectedTurma) { alert('Selecione uma turma primeiro.'); return; }
+  if (!document.getElementById('professor').value) { alert('Selecione seu nome antes de continuar.'); return; }
+  const horario = document.getElementById('horario-turma').value;
+  if (!horario) { alert('Selecione o horário da turma.'); return; }
+  selectedHorario = horario;
+  const chave = `${selectedTurma}|${horario}`;
+  alunos = (alunosPorTurma[chave] || []).slice();
+  if (alunos.length === 0) alunos = [''];
+  notas = {};
+  const t = turmas[selectedTurma];
+  document.getElementById('turma-titulo-s2').textContent = t.emoji + ' ' + t.nome + ' ' + horario.toUpperCase() + ' — ' + t.faixa;
+  renderAlunoList();
+  show('step2'); hide('step1'); hide('step3'); hide('step4');
+  setStep(2);
+}
+
+function renderAlunoList() {
+  const list = document.getElementById('aluno-list');
+  list.innerHTML = '';
+  if (alunos.length === 0) alunos = [''];
+  alunos.forEach((nome, i) => {
+    const row = document.createElement('div');
+    row.className = 'aluno-row';
+    row.innerHTML = `
+      <span style="color:#8a9bb5;font-size:13px;font-weight:600;min-width:20px;">${i+1}.</span>
+      <input type="text" value="${nome}" placeholder="Nome do aluno" onchange="alunos[${i}]=this.value" oninput="alunos[${i}]=this.value">
+      <button class="remove-btn" onclick="removeAluno(${i})">×</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function addAluno() {
+  alunos.push('');
+  renderAlunoList();
+  const inputs = document.querySelectorAll('#aluno-list input');
+  if (inputs.length) inputs[inputs.length-1].focus();
+}
+
+function removeAluno(i) {
+  if (alunos.length === 1) { alunos[0] = ''; renderAlunoList(); return; }
+  alunos.splice(i, 1);
+  renderAlunoList();
+}
+
+function goToStep3() {
+  alunos = alunos.filter(n => n.trim() !== '');
+  if (alunos.length === 0) { alert('Adicione pelo menos um aluno.'); return; }
+  renderAvaliacaoCards();
+  show('step3'); hide('step2'); hide('step1'); hide('step4');
+  setStep(3);
+}
+
+function renderAvaliacaoCards() {
+  const t = turmas[selectedTurma];
+  const container = document.getElementById('avaliacao-cards');
+  container.innerHTML = '';
+
+  alunos.forEach((nome, ai) => {
+    if (!notas[ai]) notas[ai] = {};
+    const card = document.createElement('div');
+    card.className = 'aluno-card';
+    card.innerHTML = `
+      <div class="aluno-card-header">
+        <div class="avatar">👤</div>
+        <div class="aluno-nome">${nome}</div>
+      </div>
+      <div class="aluno-card-body" id="body-${ai}"></div>
+    `;
+    container.appendChild(card);
+    const body = document.getElementById('body-' + ai);
+
+    t.indicadores.forEach((ind, ii) => {
+      const item = document.createElement('div');
+      item.className = 'indicador-item';
+      const starsHTML = [0,1,2,3,4,5].map(v => `
+        <button class="star s${v} ${notas[ai][ii] === v ? 'selected' : ''}"
+          onclick="setNota(${ai},${ii},${v})" title="Nota ${v}">${v}</button>
+      `).join('');
+      item.innerHTML = `
+        <div class="ind-header">
+          <div>
+            <div class="ind-mes">${ind.mes}</div>
+            <div class="ind-texto">${ind.texto}</div>
+          </div>
+          <div class="stars" id="stars-${ai}-${ii}">${starsHTML}</div>
+        </div>
+        <div class="field" style="margin:0;">
+          <textarea placeholder="Observação individual (opcional)..."
+            style="min-height:60px;font-size:13px;"
+            onchange="if(!notas[${ai}].obs)notas[${ai}].obs={};notas[${ai}].obs[${ii}]=this.value"
+          >${(notas[ai].obs && notas[ai].obs[ii]) || ''}</textarea>
+        </div>
+        <div class="progress-bar-wrap" id="prog-${ai}-${ii}">
+          <div class="progress-bar" style="width:${((notas[ai][ii]||0)/5)*100}%"></div>
+        </div>
+      `;
+      body.appendChild(item);
+    });
+  });
+}
+
+function setNota(ai, ii, val) {
+  notas[ai][ii] = val;
+  const starsEl = document.getElementById(`stars-${ai}-${ii}`);
+  starsEl.querySelectorAll('.star').forEach(s => {
+    s.classList.toggle('selected', parseInt(s.textContent) === val);
+  });
+  const prog = document.getElementById(`prog-${ai}-${ii}`);
+  if (prog) prog.querySelector('.progress-bar').style.width = ((val/5)*100) + '%';
+}
+
+const SHEET_URL = 'COLE_AQUI_A_URL_DO_APPS_SCRIPT';
+
+function gerarResultado() {
+  const t = turmas[selectedTurma];
+  let missing = [];
+  alunos.forEach((nome, ai) => {
+    t.indicadores.forEach((ind, ii) => {
+      if (notas[ai][ii] === undefined || notas[ai][ii] === null) missing.push(`${nome} – ${ind.mes}`);
+    });
+  });
+  if (missing.length > 0 && !confirm(`Atenção: ${missing.length} campo(s) sem nota.\n\nDeseja continuar mesmo assim?`)) return;
+
+  const prof = document.getElementById('professor').value || '—';
+  const horario = (selectedHorario || '—').toUpperCase();
+  const data = document.getElementById('data-aval').value;
+  const dataFmt = data ? new Date(data+'T12:00:00').toLocaleDateString('pt-BR') : '—';
+
+  document.getElementById('result-meta').textContent =
+    `${t.emoji} ${t.nome} ${horario} · Prof. ${prof} · ${dataFmt}`;
+
+  const table = document.getElementById('result-table');
+  const cols = ['Aluno', ...t.indicadores.map(i => i.mes), 'Média'];
+  table.innerHTML = `<tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr>`;
+
+  alunos.forEach((nome, ai) => {
+    let soma = 0, count = 0;
+    const cells = t.indicadores.map((ind, ii) => {
+      const n = notas[ai][ii] !== undefined ? notas[ai][ii] : null;
+      soma += n !== null ? n : 0; count++;
+      const cls = n !== null ? `nota-pill n${n}` : '';
+      return `<td><span class="${cls}">${n !== null ? n : '–'}</span></td>`;
+    });
+    const media = count > 0 ? (soma/count).toFixed(1) : '–';
+    const mN = Math.round(soma/count);
+    table.innerHTML += `<tr><td><strong>${nome}</strong></td>${cells.join('')}<td><span class="nota-pill n${mN}">${media}</span></td></tr>`;
+  });
+
+  show('step4'); hide('step3');
+  setStep(4);
+  enviarParaSheets();
+}
+
+async function enviarParaSheets() {
+  if (SHEET_URL === 'COLE_AQUI_A_URL_DO_APPS_SCRIPT') return;
+  const t = turmas[selectedTurma];
+  const prof = document.getElementById('professor').value || '—';
+  const horario = (selectedHorario || '—').toUpperCase();
+  const data = document.getElementById('data-aval').value;
+  const obs = document.getElementById('obs-gerais').value || '';
+  const periodo = 'Janeiro–Abril 2026';
+
+  const linhas = [];
+  alunos.forEach((nome, ai) => {
+    const linha = {
+      periodo, data, professor: prof,
+      turma: t.nome, horario, aluno: nome, obs_gerais: obs,
+    };
+    t.indicadores.forEach((ind, ii) => {
+      linha[`nota_${ind.mes.toLowerCase()}`] = notas[ai][ii] !== undefined ? notas[ai][ii] : '';
+      linha[`obs_${ind.mes.toLowerCase()}`] = (notas[ai].obs && notas[ai].obs[ii]) ? notas[ai].obs[ii] : '';
+    });
+    const vals = t.indicadores.map((_,ii) => notas[ai][ii]).filter(v => v !== undefined && v !== null);
+    linha.media = vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) : '';
+    linhas.push(linha);
+  });
+
+  try {
+    const btn = document.getElementById('btn-enviar');
+    if (btn) { btn.textContent = '⏳ Enviando...'; btn.disabled = true; }
+    await fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ aba: 'Jan-Abr', linhas })
+    });
+    if (btn) { btn.textContent = '✅ Enviado para a planilha!'; btn.style.background = '#10b981'; }
+  } catch(e) {
+    const btn = document.getElementById('btn-enviar');
+    if (btn) { btn.textContent = '⚠️ Erro ao enviar — copie manualmente'; btn.disabled = false; }
+  }
+}
+
+function copiarResultado() {
+  const t = turmas[selectedTurma];
+  const prof = document.getElementById('professor').value || '—';
+  const horario = (selectedHorario || '—').toUpperCase();
+  const data = document.getElementById('data-aval').value;
+  const dataFmt = data ? new Date(data+'T12:00:00').toLocaleDateString('pt-BR') : '—';
+  const obs = document.getElementById('obs-gerais').value;
+
+  let txt = `📊 AVALIAÇÃO TRIMESTRAL – NATAÇÃO\n`;
+  txt += `Turma: ${t.nome} ${horario} (${t.faixa})\n`;
+  txt += `Professor: ${prof} | Data: ${dataFmt}\n`;
+  txt += `Período: Janeiro–Abril 2026\n\n`;
+
+  alunos.forEach((nome, ai) => {
+    txt += `👤 ${nome}\n`;
+    t.indicadores.forEach((ind, ii) => {
+      const n = notas[ai][ii] || '–';
+      const obsInd = (notas[ai].obs && notas[ai].obs[ii]) ? ` (${notas[ai].obs[ii]})` : '';
+      txt += `   [${ind.mes}] ${ind.texto}: ${n}/5${obsInd}\n`;
+    });
+    const vals = t.indicadores.map((_,ii) => notas[ai][ii]).filter(v => v !== undefined && v !== null);
+    const media = vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) : '–';
+    txt += `   Média: ${media}\n\n`;
+  });
+
+  if (obs) txt += `📝 Observações gerais:\n${obs}\n`;
+
+  navigator.clipboard.writeText(txt).then(() => {
+    alert('✅ Resultado copiado! Cole no WhatsApp, e-mail ou planilha.');
+  }).catch(() => {
+    prompt('Copie o texto abaixo:', txt);
+  });
+}
+
+function novaAvaliacao() {
+  selectedTurma = null;
+  selectedHorario = null;
+  alunos = [];
+  notas = {};
+  document.querySelectorAll('.turma-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('meta-form').style.display = 'none';
+  document.getElementById('professor').value = '';
+  document.getElementById('horario-turma').innerHTML = '<option value="">— Selecione o horário —</option>';
+  document.getElementById('obs-gerais').value = '';
+  goToStep1();
+}
+
+function setStep(n) {
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById(`step${i}-dot`);
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    else if (i === n) el.classList.add('active');
+  }
+}
+
+function show(id) { document.getElementById(id).classList.remove('hidden'); }
+function hide(id) { document.getElementById(id).classList.add('hidden'); }
+</script>
+</body>
+</html>
